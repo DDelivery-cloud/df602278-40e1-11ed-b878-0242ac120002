@@ -19,12 +19,6 @@ $http = [System.Net.HttpListener]::new()
 $http.Prefixes.Add("http://$whost`:$wport/")
 $http.Start()
 
-if ($http.IsListening) {
-	Write-Host "[+] HTTP is listening" -ForegroundColor Green
-} else {
-	Write-Host "[!] HTTP is NOT listening" -ForegroundColor Red
-}
-
 # Banner
 function Show-Banner {
    Write-Host 
@@ -135,6 +129,11 @@ function R64Decoder {
 Show-Banner ; Write-Host
 if (($whost -eq "*") -or ($whost -eq "+")) { $whost = "0.0.0.0" }
 Write-Host "[+] Listening to new connection on $whost`:$wport" -f Blue
+if ($http.IsListening) {
+	Write-Host "[+] HTTP is listening" -ForegroundColor Green
+} else {
+	Write-Host "[!] HTTP is NOT listening" -ForegroundColor Red
+}
 while ($http.IsListening) { $context = $http.GetContext()
    
 if ($context.Request.HttpMethod -eq "GET") {
