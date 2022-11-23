@@ -332,18 +332,26 @@ else {
    $PSRKey = -join ( (48..57) + (65..90) + (97..122) | Get-Random -Count 24 | % {[char]$_})
 
    Write-Host "[+] Testing folder $Directory.." -ForegroundColor Blue
-   if (Test-Path -Path $Folder1) {
-      #Path exists. Cleanup.
-      Write-Output "    Test folder exist, cleanup folder" -ForegroundColor Blue
+   if (Test-Path -Path $Directory) {
+		#Path exists. Cleanup.
+		Write-Output "    $Directory folder exist" -ForegroundColor Blue
    } else {
-   #Path doesn't exist. Creating new one!
-   Write-Output "    No test folder, creating one" -ForegroundColor Blue
-       mkdir $Folder1 | Out-Null
+		#Path doesn't exist. Creating new one!
+		Write-Output "    No $Directory folder, creating one" -ForegroundColor Blue
+		mkdir $Directory | Out-Null
    }
    
    Write-Output "[+] Creating 1k test txt files with test content" -ForegroundColor Blue
    1..1000 | ForEach-Object {
-      Out-File -InputObject 'RansomwareTest' -FilePath $Folder1\TestTextFile$_.txt
+      Out-File -InputObject 'RansomwareTest Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Morbi enim nunc faucibus a. Pharetra pharetra massa massa ultricies. Metus vulputate eu scelerisque felis imperdiet proin fermentum. A scelerisque purus semper eget duis at tellus at urna. Consequat nisl vel pretium lectus quam id leo in vitae. Bibendum ut tristique et egestas quis ipsum. Ultrices neque ornare aenean euismod elementum nisi quis eleifend. Libero nunc consequat interdum varius sit amet mattis vulputate enim. Aliquet nibh praesent tristique magna sit amet purus.
+
+Viverra nibh cras pulvinar mattis nunc sed. Metus vulputate eu scelerisque felis imperdiet proin fermentum leo. Leo in vitae turpis massa sed. Semper eget duis at tellus at urna condimentum. Aenean pharetra magna ac placerat. Etiam non quam lacus suspendisse faucibus interdum posuere. Amet est placerat in egestas erat imperdiet sed. Sit amet massa vitae tortor condimentum lacinia quis vel eros. Vehicula ipsum a arcu cursus vitae congue mauris. Consectetur purus ut faucibus pulvinar elementum. Faucibus ornare suspendisse sed nisi. Auctor eu augue ut lectus. Habitasse platea dictumst vestibulum rhoncus. Quis vel eros donec ac odio tempor. Sed velit dignissim sodales ut eu sem integer vitae justo. Potenti nullam ac tortor vitae purus faucibus ornare. Eget velit aliquet sagittis id consectetur purus ut. Ornare aenean euismod elementum nisi quis. Odio aenean sed adipiscing diam donec adipiscing tristique.
+
+Habitant morbi tristique senectus et. Gravida cum sociis natoque penatibus et magnis dis. Eget gravida cum sociis natoque penatibus et magnis dis parturient. Non consectetur a erat nam at lectus urna duis. Ut morbi tincidunt augue interdum velit euismod in pellentesque massa. Lectus mauris ultrices eros in. Tristique sollicitudin nibh sit amet commodo nulla. Ultrices vitae auctor eu augue ut lectus. Egestas dui id ornare arcu odio ut sem. Malesuada nunc vel risus commodo viverra maecenas accumsan.
+
+Sed cras ornare arcu dui vivamus. Lectus arcu bibendum at varius vel pharetra vel turpis nunc. Vulputate ut pharetra sit amet. Mauris sit amet massa vitae. Lobortis mattis aliquam faucibus purus in massa tempor nec feugiat. Pellentesque nec nam aliquam sem et tortor consequat. Cum sociis natoque penatibus et magnis dis. Sit amet mauris commodo quis imperdiet massa tincidunt. Luctus accumsan tortor posuere ac ut consequat semper. Sit amet cursus sit amet dictum sit amet justo donec. Molestie a iaculis at erat pellentesque adipiscing. Amet tellus cras adipiscing enim eu turpis egestas pretium aenean. Pulvinar mattis nunc sed blandit libero volutpat. At elementum eu facilisis sed. Ipsum suspendisse ultrices gravida dictum fusce ut.
+
+Semper eget duis at tellus at urna condimentum mattis. Eget est lorem ipsum dolor sit amet consectetur adipiscing elit. Diam maecenas sed enim ut sem viverra aliquet eget. Eu facilisis sed odio morbi quis. Et malesuada fames ac turpis egestas maecenas pharetra convallis. Ut pharetra sit amet aliquam id diam. Ornare massa eget egestas purus viverra. Nibh tortor id aliquet lectus proin nibh nisl condimentum id. Diam vel quam elementum pulvinar etiam non quam. Mi ipsum faucibus vitae aliquet nec ullamcorper. Nec ultrices dui sapien eget mi proin sed. Morbi non arcu risus quis varius quam quisque. Egestas sed tempus urna et. Enim tortor at auctor urna nunc id. Velit scelerisque in dictum non. Neque sodales ut etiam sit amet nisl purus. Odio facilisis mauris sit amet massa vitae. Nam libero justo laoreet sit amet cursus sit. Etiam tempor orci eu lobortis. Egestas pretium aenean pharetra magna.' -FilePath $Directory\TestTextFile$_.txt
    }
    
    Write-Host "[!] Encrypting all files with 256 bits AES key.." -ForegroundColor Red
