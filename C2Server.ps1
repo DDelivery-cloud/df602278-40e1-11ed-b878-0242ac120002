@@ -19,6 +19,12 @@ $http = [System.Net.HttpListener]::new()
 $http.Prefixes.Add("http://$whost`:$wport/")
 $http.Start()
 
+if ($http.IsListening) {
+	Write-Host "[+] HTTP is listening" -ForegroundColor Green
+} else {
+	Write-Host "[!] HTTP is NOT listening" -ForegroundColor Red
+}
+
 # Banner
 function Show-Banner {
    Write-Host 
