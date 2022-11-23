@@ -334,14 +334,14 @@ else {
    Write-Host "[+] Testing folder $Directory.." -ForegroundColor Blue
    if (Test-Path -Path $Directory) {
 		#Path exists. Cleanup.
-		Write-Output "    $Directory folder exist" -ForegroundColor Blue
+		Write-Host "    $Directory folder exist" -ForegroundColor Blue
    } else {
 		#Path doesn't exist. Creating new one!
-		Write-Output "    No $Directory folder, creating one" -ForegroundColor Blue
+		Write-Host "    No $Directory folder, creating one" -ForegroundColor Blue
 		mkdir $Directory | Out-Null
    }
    
-   Write-Output "[+] Creating 1k test txt files with test content" -ForegroundColor Blue
+   Write-Host "[+] Creating 1k test txt files with test content" -ForegroundColor Blue
    1..1000 | ForEach-Object {
       Out-File -InputObject 'RansomwareTest Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Morbi enim nunc faucibus a. Pharetra pharetra massa massa ultricies. Metus vulputate eu scelerisque felis imperdiet proin fermentum. A scelerisque purus semper eget duis at tellus at urna. Consequat nisl vel pretium lectus quam id leo in vitae. Bibendum ut tristique et egestas quis ipsum. Ultrices neque ornare aenean euismod elementum nisi quis eleifend. Libero nunc consequat interdum varius sit amet mattis vulputate enim. Aliquet nibh praesent tristique magna sit amet purus.
 
